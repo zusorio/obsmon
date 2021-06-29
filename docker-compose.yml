@@ -1,0 +1,35 @@
+version: "3"
+services:
+  obsmon:
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - OBS_URL=192.168.1.5 # Change this to your computers IP
+      - OBS_PORT=4444 # This is the default in obs-websocket
+      - OBS_PASSWORD= # Leave like this if you have no password
+
+  prometheus:
+    restart: unless-stopped
+    image: prom/prometheus
+    volumes:
+      - prometheus-data:/prometheus
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    depends_on:
+      - obsmon
+
+  grafana:
+    restart: unless-stopped
+    image: grafana/grafana
+    volumes:
+    - grafana-data:/var/lib/grafana
+    - ./provisioning:/etc/grafana/provisioning
+    ports:
+    - 3000:3000
+    depends_on:
+      - prometheus
+
+volumes:
+  grafana-data:
+  prometheus-data:
