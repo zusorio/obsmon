@@ -2,9 +2,7 @@ version: "3"
 services:
   obsmon:
     restart: unless-stopped
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: ghcr.io/zusorcode/obsmon:latest
     environment:
       - OBS_URL=192.168.1.5 # Change this to your computers IP
       - OBS_PORT=4444 # This is the default in obs-websocket
