@@ -429,7 +429,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "render_missed_frames{}",
+          "expr": "render_missed_frames{instance=\"obsmon:8000\"}",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -511,7 +511,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "output_skipped_frames{}",
+          "expr": "output_skipped_frames{instance=\"obsmon:8000\"}",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -595,7 +595,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "memory_usage{}",
+          "expr": "memory_usage{instance=\"obsmon:8000\"}",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -677,7 +677,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "cpu_usage_percent{}",
+          "expr": "cpu_usage_percent{instance=\"obsmon:8000\"}",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -759,7 +759,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "free_disk_space{}",
+          "expr": "free_disk_space{instance=\"obsmon:8000\"}",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -841,7 +841,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "average_frame_time{}",
+          "expr": "average_frame_time{instance=\"obsmon:8000\"}",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -899,7 +899,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "total_stream_time{}",
+          "expr": "total_stream_time{instance=\"obsmon:8000\"}",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -981,7 +981,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "num_total_frames{}",
+          "expr": "num_total_frames{instance=\"obsmon:8000\"}",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -1063,7 +1063,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "render_total_frames{}",
+          "expr": "render_total_frames{instance=\"obsmon:8000\"}",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -1145,7 +1145,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "output_total_frames{}",
+          "expr": "output_total_frames{instance=\"obsmon:8000\"}",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
