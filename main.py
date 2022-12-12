@@ -1,8 +1,12 @@
 import logging
+
+from obsws_python.error import OBSSDKError
+
+logging.basicConfig(level=logging.INFO)
 import time
 from os import getenv
 
-from obswebsocket.exceptions import ConnectionFailure
+import obsws_python as obs
 from prometheus_client import Gauge, start_http_server
 
 bitrate = Gauge('bitrate', 'Bitrate in kbits')
@@ -24,11 +28,6 @@ average_frame_time = Gauge('average_frame_time', 'Average frame time in millisec
 cpu_usage_percent = Gauge('cpu_usage_percent', 'CPU usage percent')
 memory_usage = Gauge('memory_usage', 'Current RAM usage in megabytes')
 free_disk_space = Gauge('free_disk_space', 'Free recording disk space in megabytes')
-
-
-logging.basicConfig(level=logging.INFO)
-
-from obswebsocket import obsws, events
 
 host = getenv("OBS_URL", "localhost")
 port = getenv("OBS_PORT", 4444)
@@ -52,50 +51,58 @@ def reset_data(*_):
     free_disk_space.set(0)
 
 
-def on_stream_status(message: events.StreamStatus):
-    if message.getStreaming():
-        bitrate.set(message.getKbitsPerSec())
-        frames_dropped_percent.set(message.getStrain())
-        total_stream_time.set(message.getTotalStreamTime())
-        num_total_frames.set(message.getNumTotalFrames())
-        frames_dropped_count.set(message.getNumDroppedFrames())
-        fps.set(message.getFps())
-        render_total_frames.set(message.getRenderTotalFrames())
-        render_missed_frames.set(message.getRenderMissedFrames())
-        output_total_frames.set(message.getOutputTotalFrames())
-        output_skipped_frames.set(message.getOutputSkippedFrames())
-        average_frame_time.set(message.getAverageFrameTime())
-        cpu_usage_percent.set(message.getCpuUsage())
-        memory_usage.set(message.getMemoryUsage())
-        free_disk_space.set(message.getFreeDiskSpace())
-    else:
+def on_stream_state_changed(data):
+    if not data.output_active:
         reset_data()
 
 
-def stream(ws: obsws):
-    ws.connect()
-    time.sleep(60*60*24*7)
+def on_exit_started(_):
+    reset_data()
+
+
+def update_data():
+    stats = cl.get_stats()
+
+    cpu_usage_percent.set(stats.cpu_usage)
+    memory_usage.set(stats.memory_usage)
+    free_disk_space.set(stats.available_disk_space)
+    fps.set(stats.active_fps)
+    average_frame_time.set(stats.average_frame_render_time)
+    render_missed_frames.set(stats.render_skipped_frames)
+    render_total_frames.set(stats.render_total_frames)
+    output_skipped_frames.set(stats.output_skipped_frames)
+    output_total_frames.set(stats.output_total_frames)
+
+    outputs = cl.get_output_list()
+    output = outputs.outputs[0].get("outputName")
+
+    status = cl.get_output_status(output)
+    frames_dropped_count.set(status.output_skipped_frames)
+    num_total_frames.set(status.output_total_frames)
+    total_stream_time.set(status.output_duration / 1000)
+    frames_dropped_percent.set(status.output_skipped_frames / status.output_total_frames * 100 if status.output_total_frames > 0 and status.output_skipped_frames > 0 else 0)
+
+    # bitrate not currently support by obs-ws v5 (yayyyyy)
+    # bitrate.set(message.getKbitsPerSec())
 
 
 start_http_server(8000)
 
-ws = obsws(host, port, password)
-ws.register(on_stream_status, events.StreamStatus)
-ws.register(reset_data, events.StreamStopping)
-ws.register(reset_data, events.Exiting)
-
 while True:
     try:
-        ws.connect()
+        cl = obs.ReqClient(host=host, port=port, password=password)
+        event_client = obs.EventClient(host=host, port=port, password=password)
+        event_client.callback.register(on_stream_state_changed)
+        event_client.callback.register(on_exit_started)
         logging.info(f"Connected to OBS at {host}:{port} with password {password or 'NO PASSWORD'}")
-    except ConnectionFailure:
+    except OBSSDKError:
         logging.warning(f"Could not connect to OBS at {host}:{port} with password {password or 'NO PASSWORD'}")
         time.sleep(1)
         continue
 
-    while ws.ws.connected:
+    while cl.base_client.ws.connected and event_client.base_client.ws.connected:
+        update_data()
         time.sleep(1)
 
     logging.warning(f"Disconnected from OBS at {host}:{port} with password {password or 'NO PASSWORD'}")
-    ws.disconnect()
     reset_data()

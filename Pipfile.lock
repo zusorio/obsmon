@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "599f837faf0f7ed741c6b57baf7abf4099f508500c17197f27311c2b201746e4"
+            "sha256": "4cf3893c2abf4156ee42bdd4daf9cfa72519018c7b55c0eed6733c6b9362936f"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -16,36 +16,37 @@
         ]
     },
     "default": {
-        "obs-websocket-py": {
+        "obsws-python": {
             "hashes": [
-                "sha256:404008be3aef64765a06f1e052889e08429edb023f39262f239b6e30d592b397"
+                "sha256:33d7c1fe71b7b8971024e183bae26bb7fad3f6d2e950cc5dd2fff08769af6a8f",
+                "sha256:85df39691f71d1cefbb42a38c97932b60f5637f74254da63f0ea47c74515fed4"
             ],
             "index": "pypi",
-            "version": "==0.5.3"
+            "version": "==1.4.0"
         },
         "prometheus-client": {
             "hashes": [
-                "sha256:3a8baade6cb80bcfe43297e33e7623f3118d660d41387593758e2fb1ea173a86",
-                "sha256:b014bc76815eb1399da8ce5fc84b7717a3e63652b0c0f8804092c9363acab1b2"
+                "sha256:be26aa452490cfcf6da953f9436e95a9f2b4d578ca80094b4458930e5f584ab1",
+                "sha256:db7c05cbd13a0f79975592d112320f2605a325969b270a94b71dcabc47b931d2"
             ],
             "index": "pypi",
-            "version": "==0.11.0"
+            "version": "==0.15.0"
         },
-        "six": {
+        "tomli": {
             "hashes": [
-                "sha256:1e61c37477a1626458e36f7b1d82aa5c9b094fa4802892072e49de9c60c4c926",
-                "sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254"
+                "sha256:939de3e7a6161af0c887ef91b7d41a53e7c5a1ca976325f429cb46ea9bc30ecc",
+                "sha256:de526c12914f0c550d15924c62d72abc48d6fe7364aa87328337a31007fe8a4f"
             ],
-            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2'",
-            "version": "==1.16.0"
+            "markers": "python_version < '3.11'",
+            "version": "==2.0.1"
         },
         "websocket-client": {
             "hashes": [
-                "sha256:b68e4959d704768fa20e35c9d508c8dc2bbc041fd8d267c0d7345cffe2824568",
-                "sha256:e5c333bfa9fa739538b652b6f8c8fc2559f1d364243c8a689d7c0e1d41c2e611"
+                "sha256:d6b06432f184438d99ac1f456eaf22fe1ade524c3dd16e661142dc54e9cba574",
+                "sha256:d6e8f90ca8e2dd4e8027c4561adeb9456b54044312dba655e7cae652ceb9ae59"
             ],
-            "markers": "python_version >= '3.6'",
-            "version": "==1.1.0"
+            "markers": "python_version >= '3.7'",
+            "version": "==1.4.2"
         }
     },
     "develop": {}

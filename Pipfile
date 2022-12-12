@@ -7,7 +7,7 @@ verify_ssl = true
 
 [packages]
 prometheus-client = "*"
-obs-websocket-py = "*"
+obsws-python = "*"
 
 [requires]
 python_version = "3.9"
